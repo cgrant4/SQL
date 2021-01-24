@@ -1,0 +1,53 @@
+DROP TABLE [TerpAlum.Attendance]
+DROP TABLE [TerpAlum.Activity]
+DROP TABLE [TerpAlum.Group]
+DROP TABLE [TerpAlum.Location]
+DROP TABLE [TerpAlum.Event]
+
+CREATE TABLE [TerpAlum.Group]
+(grpCode CHAR(3) NOT NULL,
+ grpDescription VARCHAR(20) NOT NULL,
+CONSTRAINT pk_Group_grpCode PRIMARY KEY (grpCode, grpDescription)
+)
+
+CREATE TABLE [TerpAlum.Activity]
+(actCode CHAR (5),
+ actDescription VARCHAR(40),
+CONSTRAINT pk_Activity_actCode PRIMARY KEY (actCode)
+)
+
+CREATE TABLE [TerpAlum.Location]
+(locCode CHAR(4) NOT NULL,
+ locDescription VARCHAR(40),
+CONSTRAINT pk_Location_locCode PRIMARY KEY (locCode)
+)
+
+CREATE TABLE [TerpAlum.Event]
+(eveName VARCHAR(100) NOT NULL,
+ eveDate DATE NOT NULL,
+CONSTRAINT pk_Event_eveName_eveDate PRIMARY KEY (eveName, eveDate)
+)
+
+CREATE TABLE [TerpAlum.Attendance](
+grpCode CHAR(3) NOT NULL,
+actCode CHAR(5) NOT NULL,
+locCode CHAR(4) NOT NULL,
+eveName VARCHAR(100) NOT NULL,
+eveDate DATE,
+numOfParticipants INTEGER,
+avgAge INTEGER, 
+firstTimeAttendees INTEGER, 
+majorProspects INTEGER, 
+CONSTRAINT pk_Attendance_grpCode_actCode_eveName_eveDate PRIMARY KEY (grpCode,actCode,eveName,eveDate),
+CONSTRAINT fk_Attendance_grpCode FOREIGN KEY(grpCode)
+	REFERENCES [TerpAlum.Group](grpCode) 
+	ON DELETE NO ACTION ON UPDATE CASCADE,
+CONSTRAINT fk_Attendance_actCode FOREIGN KEY(actCode)
+	REFERENCES [TerpAlum.Activity](actCode)
+	ON DELETE NO ACTION ON UPDATE CASCADE,
+CONSTRAINT fk_Attendance_eveName_eveDate FOREIGN KEY(eveName, eveDate)
+	REFERENCES [TerpAlum.Event] (eveName, eveDate)
+	ON DELETE NO ACTION ON UPDATE CASCADE,
+CONSTRAINT fk_Attendance_locCode FOREIGN KEY(locCode)
+	REFERENCES [TerpAlum.Location] (locCode)
+	ON DELETE NO ACTION ON UPDATE CASCADE)
